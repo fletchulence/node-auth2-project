@@ -50,6 +50,42 @@ const only = role_name => (req, res, next) => {
  }
 }
 
+const anyWare = (req, res, next) =>{
+  /* 
+    passing to another midd
+
+    decode {token}
+
+    username = await User.findbyid()
+
+    slice - user.username.slice(0,2)
+
+    compare slice from tokenTest to the one from above
+
+    must be accurate to move on 
+
+  */
+}  
+
+const userSpecific = async (req, res, next)=>{
+  // console.log(req.decodedJWT)
+  
+  const { username } = req.decodedJWT
+
+  // console.log(username)
+
+  const dbUsername = await User.findBy({ username })
+  console.log('dbUsername', dbUsername.username, username);
+  if( dbUsername.username === username ){
+    // conso
+    next()
+    /* if slice === sliceToken => next() */
+  } else {
+    next({ message: 'sorry, this is a user specific endpoint' })
+  }
+  // next()
+}
+
 
 const checkUsernameExists = async (req, res, next) => {
   /*
@@ -115,4 +151,5 @@ module.exports = {
   checkUsernameExists,
   validateRoleName,
   only,
+  userSpecific
 }
